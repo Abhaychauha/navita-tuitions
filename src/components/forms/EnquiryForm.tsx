@@ -26,8 +26,8 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
   defaultGrade = '',
   defaultBoard = '',
   defaultSubject = '',
-  title = "Enquire for Admissions",
-  subtitle = "Fill in the details below. We will get back to you promptly.",
+  title = "Book a Free Consultation or Send an Enquiry",
+  subtitle = "Fill in your details below and our team will get in touch with you promptly.",
   className = ''
 }) => {
   const [formData, setFormData] = useState<LeadEnquiry>({
@@ -108,7 +108,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
 
   if (submitted) {
     return (
-      <div className={`bg-white rounded-3xl p-6 sm:p-8 shadow-card border border-blue-300 text-center animate-in fade-in zoom-in-95 duration-200 ${className}`}>
+      <div id="enquiry" className={`scroll-mt-24 sm:scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-card border border-blue-300 text-center animate-in fade-in zoom-in-95 duration-200 ${className}`}>
         <div className="w-16 h-16 bg-gradient-to-tr from-sky-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white shadow-glow-blue">
           <CheckCircle2 className="w-9 h-9" />
         </div>
@@ -154,7 +154,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
         <button
           type="button"
           onClick={handleReset}
-          className="text-xs font-bold text-blue-700 hover:text-blue-900 underline mt-2"
+          className="text-xs font-bold text-blue-700 hover:text-blue-900 underline mt-2 cursor-pointer"
         >
           Submit Another Enquiry
         </button>
@@ -163,7 +163,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
   }
 
   return (
-    <div id="enquiry" className={`bg-white rounded-3xl p-6 sm:p-8 shadow-card border border-blue-200/90 relative overflow-hidden ${className}`}>
+    <div id="enquiry" className={`scroll-mt-24 sm:scroll-mt-28 bg-white rounded-3xl p-6 sm:p-8 shadow-card border border-blue-200/90 relative overflow-hidden ${className}`}>
       {/* Decorative ambient top glow */}
       <div className="absolute top-0 right-0 w-40 h-40 bg-sky-300/20 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10" />
 
@@ -238,7 +238,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
           </div>
         </div>
 
-        {/* Subjects & Mode (Only Offline & Online) */}
+        {/* Subjects & Mode */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -263,7 +263,7 @@ export const EnquiryForm: React.FC<EnquiryFormProps> = ({
               onChange={(e) => setFormData({ ...formData, mode: e.target.value as any })}
               className="w-full px-4 py-2.5 rounded-xl border border-blue-200 text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-100 bg-blue-50/30 font-medium"
             >
-              <option value="Offline Tuition">Offline Tuition (Padmanabhanagar)</option>
+              <option value="Offline Tuition">Offline Tuition (Padmanabhanagar Centre)</option>
               <option value="Online Tuition">Online Tuition (Live Interactive)</option>
               <option value="Not Decided">Need Guidance</option>
             </select>

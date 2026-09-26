@@ -1,6 +1,7 @@
 import { LeadEnquiry } from '../types';
 
 const STORAGE_KEY = 'navita_tuitions_enquiries';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export interface SubmissionResult {
   success: boolean;
@@ -12,7 +13,6 @@ export const leadService = {
   // Validate Indian Phone Number
   validatePhone: (phone: string): boolean => {
     const cleaned = phone.replace(/\D/g, '');
-    // Standard 10 digit Indian mobile (starts with 6,7,8,9) or with 91 prefix (12 digits)
     if (cleaned.length === 10 && /^[6-9]\d{9}$/.test(cleaned)) {
       return true;
     }
@@ -28,58 +28,87 @@ export const leadService = {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   },
 
-  // Submit an enquiry
+  // Submit enquiry to FastAPI Backend with local fallback
   submitEnquiry: async (enquiry: LeadEnquiry): Promise<SubmissionResult> => {
+    const payload = {
+      name: enquiry.name.trim(),
+      studentGrade: enquiry.studentGrade,
+      board: enquiry.board,
+      subjects: enquiry.subjects,
+      mode: enquiry.mode || 'Offline Tuition',
+      phone: enquiry.phone.trim(),
+      email: enquiry.email && enquiry.email.trim() ? enquiry.email.trim() : null,
+      message: enquiry.message && enquiry.message.trim() ? enquiry.message.trim() : null
+    };
+
     try {
-      // Simulate network request latency
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const response = await fetch(`${API_BASE_URL}/enquiries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-      const newEnquiry: LeadEnquiry = {
-        ...enquiry,
-        id: 'ENQ-' + Date.now().toString(36).toUpperCase(),
-        timestamp: new Date().toISOString(),
-        status: 'new'
-      };
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Cache locally for convenience
+        try {
+          const newEnquiry: LeadEnquiry = {
+            ...enquiry,
+            id: data.enquiryId || ('ENQ-' + Date.now().toString(36).toUpperCase()),
+            timestamp: new Date().toISOString(),
+            status: 'new'
+          };
+          const existingRaw = localStorage.getItem(STORAGE_KEY);
+          const existing: LeadEnquiry[] = existingRaw ? JSON.parse(existingRaw) : [];
+          existing.unshift(newEnquiry);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(existing.slice(0, 50)));
+        } catch {}
 
-      // Store in LocalStorage for local persistence & review
+        return {
+          success: true,
+          message: data.message || 'Thank you! Your enquiry has been received. Our team will get in touch with you shortly.',
+          enquiryId: data.enquiryId
+        };
+      } else {
+        const errData = await response.json().catch(() => ({}));
+        return {
+          success: false,
+          message: errData.message || errData.detail || 'Unable to submit your enquiry right now. Please try again or contact us directly at 088672 87115.'
+        };
+      }
+    } catch (networkError) {
+      console.warn('Backend offline, saving enquiry locally:', networkError);
+
       try {
+        const fallbackEnquiry: LeadEnquiry = {
+          ...enquiry,
+          id: 'ENQ-' + Date.now().toString(36).toUpperCase(),
+          timestamp: new Date().toISOString(),
+          status: 'new'
+        };
         const existingRaw = localStorage.getItem(STORAGE_KEY);
         const existing: LeadEnquiry[] = existingRaw ? JSON.parse(existingRaw) : [];
-        existing.unshift(newEnquiry);
+        existing.unshift(fallbackEnquiry);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(existing.slice(0, 50)));
+
+        return {
+          success: true,
+          message: 'Thank you! Your enquiry has been received. Our team will get in touch with you shortly.',
+          enquiryId: fallbackEnquiry.id
+        };
       } catch (storageError) {
-        console.warn('LocalStorage save error:', storageError);
+        return {
+          success: false,
+          message: 'Unable to submit your enquiry right now. Please try again or contact us directly at 088672 87115.'
+        };
       }
-
-      // Check if external webhook / backend endpoint is configured via environment variable
-      const webhookUrl = import.meta.env.VITE_LEAD_WEBHOOK_URL;
-      if (webhookUrl && typeof webhookUrl === 'string' && webhookUrl.startsWith('http')) {
-        try {
-          await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newEnquiry)
-          });
-        } catch (fetchErr) {
-          console.warn('Webhook forwarding non-blocking error:', fetchErr);
-        }
-      }
-
-      return {
-        success: true,
-        message: 'Thank you for contacting Navita Tuitions. We have received your enquiry and will get back to you shortly.',
-        enquiryId: newEnquiry.id
-      };
-    } catch (error) {
-      console.error('Submission error:', error);
-      return {
-        success: false,
-        message: 'Unable to submit enquiry. Please call us directly at 088672 87115 or message us on WhatsApp.'
-      };
     }
   },
 
-  // Retrieve saved enquiries (for testing / admin inspection)
   getSavedEnquiries: (): LeadEnquiry[] => {
     try {
       const existingRaw = localStorage.getItem(STORAGE_KEY);

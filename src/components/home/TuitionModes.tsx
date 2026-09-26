@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { SectionHeading } from '../common/SectionHeading';
-import { Building2, Laptop, Home as HomeIcon, ArrowRight, CheckCircle2 } from 'lucide-react';
-import { siteConfig } from '../../config/siteConfig';
+import { Building2, Laptop, ArrowRight, CheckCircle2 } from 'lucide-react';
 
 export const TuitionModes: React.FC = () => {
   const modes = [
@@ -16,34 +15,21 @@ export const TuitionModes: React.FC = () => {
         "Quiet, distraction-free academic study setting",
         "Weekly physical tests and worksheet evaluations"
       ],
-      path: "/contact",
+      path: "/about",
       linkText: "Visit Centre"
     },
     {
       title: "Online Tuition",
       subtitle: "Interactive Virtual Classes",
-      icon: <Laptop className="w-7 h-7 text-amber-600" />,
+      icon: <Laptop className="w-7 h-7 text-blue-600" />,
       desc: "Attend live classes remotely with structured academic support, digital whiteboards, screen sharing, and recorded doubt clarification materials.",
       features: [
         "Learn from the safety and convenience of home",
         "Digital question solving and shared online notes",
         "Flexible batch scheduling options"
       ],
-      path: "/modes/online",
+      path: "/courses",
       linkText: "Explore Online Mode"
-    },
-    {
-      title: "Home Tuition",
-      subtitle: "Personalised In-Home Support",
-      icon: <HomeIcon className="w-7 h-7 text-emerald-600" />,
-      desc: "Personalised learning support at home, subject to teacher availability and location within Padmanabhanagar, Banashankari and nearby areas.",
-      features: [
-        "Dedicated one-on-one attention for the child",
-        "Tailored entirely around the child's school pace",
-        "Direct and frequent parent-teacher updates"
-      ],
-      path: "/modes/home",
-      linkText: "Enquire Home Tuition"
     }
   ];
 
@@ -54,22 +40,22 @@ export const TuitionModes: React.FC = () => {
           badge="Learning Flexibility"
           badgeVariant="blue"
           title="Choose the Learning Mode That Suits Your Child"
-          subtitle="We provide three adaptable formats so every student receives the ideal academic support."
+          subtitle="We provide offline and online formats so every student receives the ideal academic support."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-10">
           {modes.map((m, idx) => (
-            <div key={idx} className="bg-white rounded-2xl p-7 shadow-soft border border-slate-100 flex flex-col justify-between card-hover-effect">
+            <div key={idx} className="bg-white rounded-3xl p-8 shadow-card border border-blue-200/80 flex flex-col justify-between card-hover-effect">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-5">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-5">
                   {m.icon}
                 </div>
 
-                <span className="text-xs font-bold text-amber-700 uppercase tracking-wider block mb-1">
+                <span className="text-xs font-bold text-blue-700 uppercase tracking-wider block mb-1">
                   {m.subtitle}
                 </span>
 
-                <h3 className="text-xl font-bold text-brand-900 mb-3 font-display">
+                <h3 className="text-2xl font-black text-brand-900 mb-3 font-display">
                   {m.title}
                 </h3>
 
@@ -90,19 +76,17 @@ export const TuitionModes: React.FC = () => {
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                 <Link
                   to={m.path}
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-900 hover:text-amber-600 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-900 hover:text-blue-600 transition-colors"
                 >
                   <span>{m.linkText}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
 
                 <a
-                  href={siteConfig.getWhatsAppUrl(`Hello Navita Tuitions, I want to enquire about ${m.title}.`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200 transition-colors"
+                  href="/#enquiry"
+                  className="text-xs font-extrabold text-brand-950 bg-amber-400 hover:bg-amber-300 px-3.5 py-1.5 rounded-xl shadow-xs transition-all hover:scale-105 cursor-pointer"
                 >
-                  Enquire
+                  Enquire Now
                 </a>
               </div>
             </div>
@@ -110,13 +94,13 @@ export const TuitionModes: React.FC = () => {
         </div>
 
         <div className="text-center">
-          <Link
-            to="/admissions"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-900 text-white font-bold text-sm hover:bg-brand-800 transition-all shadow-sm"
+          <a
+            href="/#enquiry"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-900 text-white font-bold text-sm hover:bg-brand-800 transition-all shadow-sm cursor-pointer"
           >
             <span>Explore Tuition Options & Availability</span>
             <ArrowRight className="w-4 h-4 text-amber-400" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>

@@ -16,7 +16,8 @@ const TrustCardItem: React.FC<{
   description: string;
   gradientBadge: string;
   topLine: string;
-}> = ({ icon, title, description, gradientBadge, topLine }) => {
+  isProminent?: boolean;
+}> = ({ icon, title, description, gradientBadge, topLine, isProminent }) => {
   const { cardRef, style, handleMouseMove, handleMouseLeave } = useCardTilt(4);
 
   return (
@@ -25,23 +26,31 @@ const TrustCardItem: React.FC<{
       style={style}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative bg-white rounded-3xl p-6 sm:p-7 shadow-card hover:shadow-card-hover border border-slate-200/80 flex flex-col justify-between group overflow-hidden transition-all duration-300"
+      className={`relative bg-white rounded-3xl flex flex-col justify-between group overflow-hidden transition-all duration-300 ${
+        isProminent 
+          ? 'p-8 sm:p-9 shadow-elevated border-2 border-blue-300 hover:border-blue-400 scale-[1.02] bg-gradient-to-b from-blue-50/30 to-white' 
+          : 'p-6 sm:p-7 shadow-card hover:shadow-card-hover border border-slate-200/80'
+      }`}
     >
-      <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${topLine}`} />
+      <div className={`absolute top-0 left-0 right-0 ${isProminent ? 'h-2' : 'h-1.5'} bg-gradient-to-r ${topLine}`} />
       
       <div>
-        <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 shadow-xs">
+        <div className={`rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 shadow-xs ${
+          isProminent ? 'w-14 h-14 bg-blue-50 border-blue-200' : 'w-12 h-12'
+        }`}>
           {icon}
         </div>
-        <h3 className="text-lg sm:text-xl font-bold text-brand-900 group-hover:text-blue-700 transition-colors mb-2 font-display">
+        <h3 className={`font-bold text-brand-900 group-hover:text-blue-700 transition-colors mb-2.5 font-display ${
+          isProminent ? 'text-xl sm:text-2xl font-black' : 'text-lg sm:text-xl'
+        }`}>
           {title}
         </h3>
-        <p className="text-slate-600 text-sm leading-relaxed">
+        <p className={`text-slate-600 leading-relaxed ${isProminent ? 'text-sm sm:text-base font-medium' : 'text-sm'}`}>
           {description}
         </p>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+      <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
         <span>Navita Advantage</span>
         <span className="text-blue-600">✓ Verified Pillar</span>
       </div>
@@ -52,11 +61,12 @@ const TrustCardItem: React.FC<{
 export const TrustSection: React.FC = () => {
   const trustCards = [
     {
-      icon: <UserCheck className="w-6 h-6 text-blue-600" />,
-      title: "Personalised Attention",
-      description: "Focused teaching designed around each student's specific learning pace and understanding.",
+      icon: <UserCheck className="w-7 h-7 text-blue-600" />,
+      title: "Personal Attention",
+      description: "Focused teaching designed around each student's specific learning pace, individual doubt resolution, and concept mastery.",
       gradientBadge: "from-blue-500 to-indigo-600",
-      topLine: "from-blue-500 to-indigo-500"
+      topLine: "from-blue-500 via-indigo-500 to-sky-500",
+      isProminent: true // Specially enlarged & prominent
     },
     {
       icon: <Sparkles className="w-6 h-6 text-amber-500" />,

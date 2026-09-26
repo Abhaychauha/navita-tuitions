@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { reviewsData } from '../../data/reviews';
 import { SectionHeading } from '../common/SectionHeading';
 import { Link } from 'react-router-dom';
-import { Star, MessageCircle, ArrowRight, ChevronLeft, ChevronRight, Quote, MapPin } from 'lucide-react';
-import { siteConfig } from '../../config/siteConfig';
+import { Star, ArrowRight, ChevronLeft, ChevronRight, Quote, MapPin } from 'lucide-react';
 
 export const ReviewsSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -16,7 +15,6 @@ export const ReviewsSection: React.FC = () => {
     setCurrentIndex((prev) => (prev - 1 + reviewsData.length) % reviewsData.length);
   };
 
-  // Autoplay with pause on hover
   useEffect(() => {
     const timer = setInterval(() => {
       nextReview();
@@ -72,7 +70,7 @@ export const ReviewsSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={prevReview}
-                  className="p-2.5 rounded-xl bg-white hover:bg-slate-100 text-brand-900 border border-slate-200 shadow-xs transition-all active:scale-95"
+                  className="p-2.5 rounded-xl bg-white hover:bg-slate-100 text-brand-900 border border-slate-200 shadow-xs transition-all active:scale-95 cursor-pointer"
                   aria-label="Previous Review"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -84,7 +82,7 @@ export const ReviewsSection: React.FC = () => {
                       key={idx}
                       type="button"
                       onClick={() => setCurrentIndex(idx)}
-                      className={`h-2 rounded-full transition-all ${
+                      className={`h-2 rounded-full transition-all cursor-pointer ${
                         currentIndex === idx ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300'
                       }`}
                       aria-label={`Go to slide ${idx + 1}`}
@@ -95,7 +93,7 @@ export const ReviewsSection: React.FC = () => {
                 <button
                   type="button"
                   onClick={nextReview}
-                  className="p-2.5 rounded-xl bg-white hover:bg-slate-100 text-brand-900 border border-slate-200 shadow-xs transition-all active:scale-95"
+                  className="p-2.5 rounded-xl bg-white hover:bg-slate-100 text-brand-900 border border-slate-200 shadow-xs transition-all active:scale-95 cursor-pointer"
                   aria-label="Next Review"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -115,15 +113,13 @@ export const ReviewsSection: React.FC = () => {
             <ArrowRight className="w-4 h-4" />
           </Link>
 
-          <a
-            href={siteConfig.getWhatsAppUrl("Hello Navita Tuitions, I read your reviews and want to talk about admissions.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-sm shadow-md transition-all hover:scale-105"
+          <Link
+            to="/about#enquiry"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-brand-950 font-extrabold text-sm shadow-md transition-all hover:scale-105"
           >
-            <MessageCircle className="w-4 h-4 fill-current" />
-            <span>Talk to Navita Tuitions</span>
-          </a>
+            <span>Enquire for Admissions</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </section>

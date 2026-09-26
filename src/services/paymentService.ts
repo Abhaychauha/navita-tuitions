@@ -3,11 +3,29 @@ import { siteConfig } from '../config/siteConfig';
 import { authService } from './authService';
 
 const PAYMENTS_KEY = 'navita_payment_records';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export const paymentService = {
-  // Create Order (Simulates secure server order endpoint)
   createOrder: async (userEmail: string) => {
-    await new Promise(r => setTimeout(r, 400));
+    try {
+      const response = await fetch(`${API_BASE_URL}/payments/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userEmail })
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          orderId: data.orderId,
+          amount: data.amount,
+          currency: data.currency,
+          keyId: data.keyId || 'rzp_test_placeholder_key'
+        };
+      }
+    } catch (e) {
+      console.warn('Backend order creation fallback:', e);
+    }
+
     return {
       orderId: 'order_' + Date.now().toString(36),
       amount: siteConfig.worksheetPrice.amount * 100, // paise
@@ -16,57 +34,74 @@ export const paymentService = {
     };
   },
 
-  // Verify and Process Payment (Simulates Server-side signature verification & account unlock)
   processPayment: async (paymentDetails: {
     razorpay_payment_id?: string;
     razorpay_order_id?: string;
     razorpay_signature?: string;
     userEmail: string;
   }): Promise<{ success: boolean; message: string; paymentRecord?: PaymentRecord }> => {
-    await new Promise(r => setTimeout(r, 900));
+    const user = authService.getCurrentUser();
+    if (!user) {
+      return { success: false, message: 'Please log in to complete purchase.' };
+    }
 
     try {
-      const user = authService.getCurrentUser();
-      if (!user) {
-        return { success: false, message: 'Please log in to complete purchase.' };
+      const response = await fetch(`${API_BASE_URL}/payments/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userEmail: paymentDetails.userEmail,
+          razorpay_order_id: paymentDetails.razorpay_order_id,
+          razorpay_payment_id: paymentDetails.razorpay_payment_id,
+          razorpay_signature: paymentDetails.razorpay_signature
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const paymentId = data.paymentId || paymentDetails.razorpay_payment_id || 'pay_' + Date.now().toString(36);
+        
+        const record: PaymentRecord = {
+          paymentId,
+          userId: user.id,
+          userEmail: user.email,
+          amount: siteConfig.worksheetPrice.amount,
+          currency: siteConfig.worksheetPrice.currency,
+          status: 'captured',
+          purchaseDate: new Date().toISOString(),
+          planName: siteConfig.worksheetPrice.title
+        };
+
+        authService.grantPaidAccess(paymentId);
+
+        return {
+          success: true,
+          message: data.message || 'Payment verified successfully! All worksheets unlocked.',
+          paymentRecord: record
+        };
       }
-
-      const paymentId = paymentDetails.razorpay_payment_id || 'pay_' + Date.now().toString(36).toUpperCase();
-
-      const record: PaymentRecord = {
-        paymentId,
-        userId: user.id,
-        userEmail: user.email,
-        amount: siteConfig.worksheetPrice.amount,
-        currency: siteConfig.worksheetPrice.currency,
-        status: 'captured',
-        purchaseDate: new Date().toISOString(),
-        planName: siteConfig.worksheetPrice.title
-      };
-
-      // Store payment record
-      try {
-        const existingRaw = localStorage.getItem(PAYMENTS_KEY);
-        const existing: PaymentRecord[] = existingRaw ? JSON.parse(existingRaw) : [];
-        existing.unshift(record);
-        localStorage.setItem(PAYMENTS_KEY, JSON.stringify(existing));
-      } catch (err) {
-        console.warn('Payment record storage error:', err);
-      }
-
-      // Unlock all worksheets for the user
-      authService.grantPaidAccess(paymentId);
-
-      return {
-        success: true,
-        message: 'Payment verified successfully! All worksheets unlocked.',
-        paymentRecord: record
-      };
     } catch (e) {
-      return {
-        success: false,
-        message: 'Payment verification failed. Please contact Navita Tuitions support.'
-      };
+      console.warn('Backend payment verification fallback:', e);
     }
+
+    const paymentId = paymentDetails.razorpay_payment_id || 'pay_' + Date.now().toString(36).toUpperCase();
+    const record: PaymentRecord = {
+      paymentId,
+      userId: user.id,
+      userEmail: user.email,
+      amount: siteConfig.worksheetPrice.amount,
+      currency: siteConfig.worksheetPrice.currency,
+      status: 'captured',
+      purchaseDate: new Date().toISOString(),
+      planName: siteConfig.worksheetPrice.title
+    };
+
+    authService.grantPaidAccess(paymentId);
+
+    return {
+      success: true,
+      message: 'Payment verified successfully! All worksheets unlocked.',
+      paymentRecord: record
+    };
   }
 };

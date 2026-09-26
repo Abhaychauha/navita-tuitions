@@ -26,11 +26,24 @@ import { RefundPolicyPage } from './pages/RefundPolicyPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export function App() {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const scrollToElement = () => {
+        const elem = document.getElementById(id);
+        if (elem) {
+          elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+      
+      setTimeout(scrollToElement, 50);
+      setTimeout(scrollToElement, 200);
+      return;
+    }
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [location.pathname, location.hash]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F0F5FA] text-slate-800 selection:bg-amber-200 selection:text-brand-950">
@@ -42,7 +55,7 @@ export function App() {
           <Route path="/worksheets" element={<WorksheetsPage />} />
           <Route path="/worksheets/:id" element={<WorksheetDetailPage />} />
           
-          {/* All Courses, Grades, Boards, Modes, Programs routes point to CoursesPage */}
+          {/* Courses, Grades, Boards, Modes, Programs */}
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:slug" element={<CoursesPage />} />
           <Route path="/grades/:slug" element={<CoursesPage />} />
@@ -52,7 +65,7 @@ export function App() {
           <Route path="/programs/:slug" element={<CoursesPage />} />
           <Route path="/study-plans" element={<CoursesPage />} />
           
-          {/* About, Contact & Admissions */}
+          {/* About, Contact & Admissions - all integrated into AboutPage */}
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<AboutPage />} />
           <Route path="/admissions" element={<AboutPage />} />

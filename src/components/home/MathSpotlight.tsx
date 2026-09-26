@@ -1,7 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Calculator, CheckCircle2, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
-import { siteConfig } from '../../config/siteConfig';
+import { Calculator, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const MathSpotlight: React.FC = () => {
   const mathFeatures = [
@@ -12,6 +10,15 @@ export const MathSpotlight: React.FC = () => {
     { title: "Individual Doubt Clearing", desc: "Dedicated attention to school textbook exercises and homework." },
     { title: "Board Exam Preparation", desc: "Previous years' questions, timed sections, and step-wise marking tips." }
   ];
+
+  const handleScrollToEnquiry = (e: React.MouseEvent) => {
+    const elem = document.getElementById('enquiry');
+    if (elem) {
+      e.preventDefault();
+      elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.pushState(null, '', '#enquiry');
+    }
+  };
 
   return (
     <section className="py-16 md:py-24 bg-gradient-to-br from-brand-950 via-brand-900 to-indigo-950 text-white relative overflow-hidden">
@@ -41,22 +48,13 @@ export const MathSpotlight: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <Link
-                to="/courses/mathematics"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-brand-950 font-extrabold text-sm hover:from-amber-300 hover:to-yellow-300 transition-all shadow-md hover:shadow-glow-amber"
+              <a
+                href="#enquiry"
+                onClick={handleScrollToEnquiry}
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-brand-950 font-extrabold text-sm hover:from-amber-300 hover:to-yellow-300 transition-all shadow-md hover:shadow-glow-amber cursor-pointer"
               >
                 <span>Enquire About Math Tuition</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
-
-              <a
-                href={siteConfig.getWhatsAppUrl("Hello Navita Tuitions, I would like to enquire about Mathematics tuition classes.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-all"
-              >
-                <MessageCircle className="w-4 h-4 text-emerald-400" />
-                <span>Chat on WhatsApp</span>
               </a>
             </div>
           </div>

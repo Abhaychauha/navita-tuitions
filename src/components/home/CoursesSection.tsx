@@ -3,8 +3,7 @@ import { coursesData } from '../../data/courses';
 import { CourseCard } from '../cards/CourseCard';
 import { SectionHeading } from '../common/SectionHeading';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Clock, Calendar } from 'lucide-react';
-import { siteConfig } from '../../config/siteConfig';
+import { ArrowRight, Calculator } from 'lucide-react';
 
 export const CoursesSection: React.FC = () => {
   return (
@@ -23,27 +22,44 @@ export const CoursesSection: React.FC = () => {
             <CourseCard key={course.id} course={course} />
           ))}
 
-          {/* Daily Math Practice Feature Card */}
-          <div className="bg-gradient-to-br from-brand-900 to-brand-950 text-white rounded-2xl p-6 sm:p-7 shadow-card flex flex-col justify-between card-hover-effect">
-            <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30 mb-3">
-                Core Habit
-              </span>
-              <h3 className="text-xl font-bold text-white mb-2.5 font-display">
+          {/* Daily Math Practice Feature Card (Slightly larger & prominent) */}
+          <div className="bg-gradient-to-br from-brand-950 via-brand-900 to-indigo-950 text-white rounded-3xl p-8 sm:p-9 shadow-elevated border-2 border-amber-400/40 flex flex-col justify-between card-hover-effect relative overflow-hidden scale-[1.02]">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-amber-400/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/40 shadow-xs">
+                  <Calculator className="w-3.5 h-3.5" />
+                  Core Daily Habit
+                </span>
+                <span className="text-amber-300 text-xs font-bold">Grades 1–11</span>
+              </div>
+
+              <h3 className="text-2xl sm:text-2xl font-black text-white mb-3 font-display">
                 Daily Math Practice
               </h3>
-              <p className="text-slate-300 text-sm leading-relaxed mb-5">
-                Structured daily math problem sets, speed drills, and doubt-clearing sessions to build mathematical intuition and speed.
+              <p className="text-slate-200 text-sm sm:text-base leading-relaxed mb-6 font-normal">
+                Structured daily problem sets, speed arithmetic drills, formula notebooks, and step-wise doubt-clearing sessions to build deep mathematical intuition.
               </p>
-              <ul className="text-xs text-slate-300 space-y-2 mb-6">
-                <li className="flex items-center gap-2">✓ Graduated difficulty worksheets</li>
-                <li className="flex items-center gap-2">✓ Step-wise calculation check</li>
-                <li className="flex items-center gap-2">✓ Formula retention notebooks</li>
+              
+              <ul className="text-xs sm:text-sm text-slate-300 space-y-2.5 mb-6">
+                <li className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span>Graduated difficulty worksheets (Easy → Advanced)</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  <span>Step-wise calculation check & formula retention</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-400" />
+                  <span>Timed problem solving & board exam question sets</span>
+                </li>
               </ul>
             </div>
 
-            <div className="pt-4 border-t border-brand-800 flex items-center justify-between">
-              <Link to="/courses/mathematics" className="text-xs sm:text-sm font-bold text-amber-300 hover:text-amber-200 flex items-center gap-1">
+            <div className="pt-4 border-t border-brand-800 flex items-center justify-between relative z-10">
+              <Link to="/courses" className="text-xs sm:text-sm font-extrabold text-amber-300 hover:text-amber-200 flex items-center gap-1.5">
                 <span>Explore Math Program</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
@@ -68,7 +84,7 @@ export const CoursesSection: React.FC = () => {
             </div>
 
             <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <Link to="/study-plans" className="text-xs sm:text-sm font-bold text-brand-900 hover:text-amber-600 flex items-center gap-1">
+              <Link to="/courses" className="text-xs sm:text-sm font-bold text-brand-900 hover:text-amber-600 flex items-center gap-1">
                 <span>View Study Frameworks</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>

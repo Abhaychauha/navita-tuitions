@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Course } from '../../types';
 import { CheckCircle2, ArrowRight, BookOpen, Calculator, Code2, Sparkles, Layers, GraduationCap } from 'lucide-react';
-import { siteConfig } from '../../config/siteConfig';
 import { useCardTilt } from '../../hooks/useCardTilt';
 
 interface CourseCardProps {
@@ -140,12 +139,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         </Link>
 
         <a
-          href={siteConfig.getWhatsAppUrl(`Hello Navita Tuitions, I want to enquire about ${course.title}.`)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors"
+          href="/#enquiry"
+          className="text-xs font-extrabold text-brand-950 bg-amber-400 hover:bg-amber-300 px-3.5 py-1.5 rounded-xl shadow-xs transition-all hover:scale-105 cursor-pointer"
         >
-          Enquire
+          Enquire Now
         </a>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { SectionHeading } from '../components/common/SectionHeading';
 import { EnquiryForm } from '../components/forms/EnquiryForm';
 import { siteConfig } from '../config/siteConfig';
 import { 
@@ -8,10 +7,7 @@ import {
   MessageCircle, 
   GraduationCap, 
   CheckCircle2, 
-  Award, 
-  ExternalLink,
-  ShieldCheck,
-  HeartHandshake
+  ExternalLink
 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {

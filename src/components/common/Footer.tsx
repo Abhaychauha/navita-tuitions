@@ -7,8 +7,7 @@ import {
   MessageCircle, 
   ArrowUpRight, 
   CheckCircle2, 
-  ExternalLink,
-  Sparkles 
+  ExternalLink
 } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 
@@ -23,19 +22,11 @@ export const Footer: React.FC = () => {
             <p className="text-xs sm:text-sm text-sky-100">Admissions open for Grades 1–10 across ICSE, CBSE, State Board & NIOS in Padmanabhanagar.</p>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <Link
-              to="/about#enquiry"
-              className="px-5 py-2.5 rounded-xl bg-amber-400 text-brand-950 font-extrabold text-xs sm:text-sm hover:bg-amber-300 transition-all shadow-md"
+            <a
+              href="/#enquiry"
+              className="px-6 py-3 rounded-xl bg-amber-400 text-brand-950 font-extrabold text-sm hover:bg-amber-300 transition-all shadow-md hover:scale-105 cursor-pointer"
             >
               Enquire Now
-            </Link>
-            <a
-              href={siteConfig.getWhatsAppUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs sm:text-sm transition-all"
-            >
-              WhatsApp Us
             </a>
           </div>
         </div>
@@ -99,10 +90,10 @@ export const Footer: React.FC = () => {
                 <Link to="/faq" className="text-slate-400 hover:text-amber-300 transition-colors">Frequently Asked Questions</Link>
               </li>
               <li>
-                <Link to="/about#enquiry" className="text-amber-400 hover:text-amber-300 font-bold transition-colors flex items-center gap-1">
+                <a href="/#enquiry" className="text-amber-400 hover:text-amber-300 font-bold transition-colors flex items-center gap-1 cursor-pointer">
                   <span>Book Free Consultation</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

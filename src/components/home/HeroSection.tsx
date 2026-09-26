@@ -1,27 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
   GraduationCap, 
   MapPin, 
   CheckCircle2, 
   Phone, 
-  MessageCircle, 
   Sparkles, 
-  BookOpen, 
-  Calculator, 
-  Code2, 
-  ArrowRight,
-  Star,
-  Trophy,
-  Lightbulb,
-  Compass,
-  Layers
+  ArrowRight
 } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 import { useMouseGlow } from '../../hooks/useMouseGlow';
 
 export const HeroSection: React.FC = () => {
   const { containerRef, position, handleMouseMove, handleMouseLeave } = useMouseGlow();
+
+  const handleScrollToEnquiry = (e: React.MouseEvent) => {
+    const elem = document.getElementById('enquiry');
+    if (elem) {
+      e.preventDefault();
+      elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.pushState(null, '', '#enquiry');
+    }
+  };
 
   return (
     <section 
@@ -76,46 +75,36 @@ export const HeroSection: React.FC = () => {
               Personalised tuition for students from Grade 1 to Grade 10 across ICSE, CBSE, State Board and NIOS — with focused academic support, regular practice and exam preparation.
             </p>
 
-            {/* Quick Feature Pills */}
-            <div className="flex flex-wrap gap-2 justify-center lg:justify-start pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 border border-slate-200 text-slate-700 text-xs font-bold shadow-xs">
+            {/* Prominent Feature Pills */}
+            <div className="flex flex-wrap gap-2.5 justify-center lg:justify-start pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/95 border border-blue-200 text-brand-900 text-xs sm:text-sm font-bold shadow-xs">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Personal Attention
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 border border-slate-200 text-slate-700 text-xs font-bold shadow-xs">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/95 border border-blue-200 text-brand-900 text-xs sm:text-sm font-bold shadow-xs">
                 <CheckCircle2 className="w-4 h-4 text-blue-600" /> Daily Math Practice
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/90 border border-slate-200 text-slate-700 text-xs font-bold shadow-xs">
-                <CheckCircle2 className="w-4 h-4 text-purple-600" /> Offline • Online Tuition
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/95 border border-blue-200 text-brand-900 text-xs sm:text-sm font-bold shadow-xs">
+                <CheckCircle2 className="w-4 h-4 text-purple-600" /> Offline & Online Tuition
               </span>
             </div>
 
-            {/* 3 Redesigned Action CTAs */}
-            <div className="pt-3 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5">
-              {/* Primary Consultation CTA */}
-              <Link
-                to="/admissions"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl text-base font-extrabold text-brand-950 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 shadow-md hover:shadow-glow-amber transition-all duration-300 hover:scale-105 active:scale-95 group"
+            {/* Action CTAs: Book Consultation & Direct Call (No duplicate in-content WhatsApp) */}
+            <div className="pt-3 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+              {/* Primary Consultation CTA -> Smooth scroll directly to #enquiry */}
+              <a
+                href="#enquiry"
+                onClick={handleScrollToEnquiry}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-base font-extrabold text-brand-950 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 shadow-md hover:shadow-glow-amber transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer"
               >
                 <Sparkles className="w-5 h-5 text-amber-900 animate-spin" style={{ animationDuration: '8s' }} />
                 <span>Book a Free Consultation</span>
                 <ArrowRight className="w-4 h-4 text-brand-950 transition-transform duration-200 group-hover:translate-x-1" />
-              </Link>
-
-              {/* Secondary WhatsApp CTA */}
-              <a
-                href={siteConfig.getWhatsAppUrl("Hello Navita Tuitions, I would like to chat about tuition for my child.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-base font-extrabold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 active:scale-95"
-              >
-                <MessageCircle className="w-5 h-5 fill-current" />
-                <span>Chat on WhatsApp</span>
               </a>
 
-              {/* Third Call CTA */}
+              {/* Call CTA */}
               <a
                 href={siteConfig.phoneTel}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-2xl text-sm font-bold text-brand-900 bg-white/90 hover:bg-slate-50 border border-slate-200/90 shadow-xs transition-all hover:scale-102"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-sm sm:text-base font-bold text-brand-900 bg-white/90 hover:bg-slate-50 border border-slate-200/90 shadow-xs transition-all hover:scale-102"
               >
                 <Phone className="w-4 h-4 text-blue-600" />
                 <span>Call {siteConfig.phone}</span>

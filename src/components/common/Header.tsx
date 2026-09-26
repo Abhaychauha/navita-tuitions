@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Menu, 
   X, 
@@ -8,9 +8,7 @@ import {
   GraduationCap, 
   Sparkles,
   MapPin,
-  User,
-  BookOpen,
-  ArrowRight
+  User
 } from 'lucide-react';
 import { siteConfig } from '../../config/siteConfig';
 import { authService } from '../../services/authService';
@@ -19,6 +17,7 @@ export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const currentUser = authService.getCurrentUser();
 
   useEffect(() => {
@@ -32,6 +31,19 @@ export const Header: React.FC = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  const handleEnquiryClick = (e: React.MouseEvent) => {
+    if (location.pathname === '/') {
+      const elem = document.getElementById('enquiry');
+      if (elem) {
+        e.preventDefault();
+        elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.pushState(null, '', '#enquiry');
+        return;
+      }
+    }
+    navigate('/#enquiry');
+  };
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -84,7 +96,7 @@ export const Header: React.FC = () => {
       {/* Main Navigation Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo with 3D gradient badge */}
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group focus:outline-none">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-brand-950 via-blue-900 to-indigo-600 flex items-center justify-center text-white shadow-glow-blue group-hover:scale-105 group-hover:rotate-1 transition-all duration-300 border border-blue-400/30">
               <GraduationCap className="w-6 h-6 text-amber-400" />
@@ -99,7 +111,7 @@ export const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation - 7 Core Items */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
@@ -124,9 +136,8 @@ export const Header: React.FC = () => {
             })}
           </nav>
 
-          {/* Desktop Right Action CTAs: Auth + Enquire */}
+          {/* Desktop Right Action CTAs */}
           <div className="hidden lg:flex items-center gap-3">
-            {/* Dynamic Auth Link */}
             {currentUser ? (
               <Link
                 to="/account"
@@ -145,14 +156,15 @@ export const Header: React.FC = () => {
               </Link>
             )}
 
-            {/* Glowing Gradient Enquire Now button */}
-            <Link
-              to="/about"
-              className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold text-brand-950 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 shadow-md hover:shadow-glow-amber transition-all duration-300 hover:scale-105 active:scale-95 group overflow-hidden"
+            {/* Enquire Now CTA -> Smooth-scroll to /#enquiry */}
+            <a
+              href="/#enquiry"
+              onClick={handleEnquiryClick}
+              className="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-extrabold text-brand-950 bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 shadow-md hover:shadow-glow-amber transition-all duration-300 hover:scale-105 active:scale-95 group overflow-hidden cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-amber-900 animate-spin" style={{ animationDuration: '8s' }} />
               <span>Enquire Now</span>
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Actions */}
@@ -222,13 +234,17 @@ export const Header: React.FC = () => {
           </div>
 
           <div className="pt-3 border-t border-slate-100">
-            <Link
-              to="/about"
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-amber-400 to-amber-300 text-brand-950 rounded-xl font-extrabold text-center text-sm shadow-md"
+            <a
+              href="/#enquiry"
+              onClick={(e) => {
+                setMobileMenuOpen(false);
+                handleEnquiryClick(e);
+              }}
+              className="w-full flex items-center justify-center gap-2 py-3.5 px-4 bg-gradient-to-r from-amber-400 to-amber-300 text-brand-950 rounded-xl font-extrabold text-center text-sm shadow-md cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-amber-900" />
               <span>Book a Free Consultation</span>
-            </Link>
+            </a>
           </div>
         </div>
       )}
